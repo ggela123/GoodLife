@@ -16,6 +16,10 @@ import WhichCountriesWouldYouLikeToVisit from './screens/WhichCountriesWouldYouL
 import WhereWouldYouLikeToTravelTo from './screens/WhereWouldYouLikeToTravelTo';
 import WhatOpportunitiesAreYouLookingFor from './screens/WhatOpportunitiesAreYouLookingFor';
 import HomeScreen from './screens/HomeScreen';
+import MessagesScreen from './screens/MessagesScreen';
+import ProfileScreen from './screens/ProfileScreen';
+import AITravelAgentScreen from './screens/AITravelAgentScreen';
+import ChatConversationScreen from './screens/ChatConversationScreen';
 
 const Stack = createStackNavigator();
 
@@ -40,6 +44,10 @@ export default function App() {
         <Stack.Screen name="WhereWouldYouLikeToTravelTo" component={WhereWouldYouLikeToTravelTo} />
         <Stack.Screen name="WhatOpportunitiesAreYouLookingFor" component={WhatOpportunitiesAreYouLookingFor} />
         <Stack.Screen name="Home" component={HomeScreen} />
+        <Stack.Screen name="Messages" component={MessagesScreen} />
+        <Stack.Screen name="Profile" component={ProfileScreen} />
+        <Stack.Screen name="AITravelAgent" component={AITravelAgentScreen} />
+        <Stack.Screen name="ChatConversation" component={ChatConversationScreen} />
       </Stack.Navigator>
       <StatusBar style="auto" />
     </NavigationContainer>
