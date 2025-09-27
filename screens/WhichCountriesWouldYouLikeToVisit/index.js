@@ -1,6 +1,6 @@
 import React from "react";
 import { SafeAreaView, View, ScrollView, Image, Text, TouchableOpacity, } from "react-native";
-export default (props) => {
+export default ({ navigation }) => {
 	return (
 		<SafeAreaView 
 			style={{
@@ -228,7 +228,7 @@ export default (props) => {
 								borderRadius: 100,
 								paddingVertical: 14,
 								marginHorizontal: 15,
-							}} onPress={()=>alert('Pressed!')}>
+							}} onPress={() => navigation.navigate('WhatOpportunitiesAreYouLookingFor')}>
 							<Text 
 								style={{
 									color: "#FFFFFF",
