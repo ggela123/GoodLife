@@ -2,6 +2,7 @@ import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import { AuthProvider } from './supabase/AuthProvider';
 
 // Import your screens
 import SplashScreen from './screens/SplashScreen';
@@ -25,7 +26,8 @@ const Stack = createStackNavigator();
 
 export default function App() {
   return (
-    <NavigationContainer>
+    <AuthProvider>
+      <NavigationContainer>
       <Stack.Navigator 
         initialRouteName="Splash"
         screenOptions={{
@@ -50,6 +52,7 @@ export default function App() {
         <Stack.Screen name="ChatConversation" component={ChatConversationScreen} />
       </Stack.Navigator>
       <StatusBar style="auto" />
-    </NavigationContainer>
+      </NavigationContainer>
+    </AuthProvider>
   );
 }
