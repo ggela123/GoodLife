@@ -1,38 +1,77 @@
-import React, { useState } from "react";
-import { SafeAreaView, View, ScrollView, Text, TouchableOpacity, TextInput, KeyboardAvoidingView, Platform } from "react-native";
+import React, { useState, useRef } from "react";
+import { SafeAreaView, View, ScrollView, Text, TouchableOpacity, TextInput, KeyboardAvoidingView, Platform, ActivityIndicator } from "react-native";
+import Constants from 'expo-constants';
+import * as onboardingStoreModule from '../../onboardingStore';
+const onboardingStore = onboardingStoreModule && onboardingStoreModule.default ? onboardingStoreModule.default : onboardingStoreModule;
+
+// Configure the proxy endpoint that will call Gemini server-side.
+// Prefer expo.extra.GEMINI_PROXY_URL, then env var, then sensible local defaults for dev
+const EXPO_EXTRA = Constants?.manifest?.extra || {};
+const defaultLocal = Platform.OS === 'android' ? 'http://10.0.2.2:8000/chat' : 'http://localhost:8000/chat';
+const GEMINI_PROXY_URL = EXPO_EXTRA.GEMINI_PROXY_URL || process.env.EXPO_PUBLIC_GEMINI_PROXY_URL || defaultLocal;
 
 export default function AITravelAgentScreen({ navigation }) {
 	const [messageText, setMessageText] = useState('');
 	const [isPaused, setIsPaused] = useState(false);
+	const [messages, setMessages] = useState([
+		{ id: '1', text: 'Hello — ask me about destinations, opportunities, or visas.', sender: 'ai', time: timeNow() }
+	]);
+	const [loading, setLoading] = useState(false);
+	const [error, setError] = useState(null);
+	const scrollRef = useRef(null);
 
-	const messages = [
-		{
-			id: '1',
-			text: "I'm looking to go to Iceland and have some farming opportunities through a volunteer exchange.",
-			sender: 'user',
-			time: '2:30 PM'
-		},
-		{
-			id: '2',
-			text: "That sounds like a great opportunity! What do you think about these options?",
-			sender: 'ai',
-			time: '2:31 PM'
-		},
-		{
-			id: '3',
-			text: "Iceland Farming Opportunities",
-			sender: 'ai',
-			time: '2:31 PM',
-			isLink: true
-		}
-	];
+	function timeNow() {
+		const d = new Date();
+		return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+	}
 
-	const sendMessage = () => {
-		if (messageText.trim()) {
-			// Here you would typically add the message and get AI response
-			setMessageText('');
+	async function sendMessage() {
+		const prompt = (messageText || '').trim();
+		if (!prompt) return;
+		setError(null);
+
+		// add user message locally immediately
+		const userMsg = { id: String(Date.now()), text: prompt, sender: 'user', time: timeNow() };
+		setMessages(prev => [...prev, userMsg]);
+		setMessageText('');
+		setLoading(true);
+
+		try {
+			// POST to your server-side proxy that makes requests to Gemini.
+			const onboarding = onboardingStore.getOnboarding ? onboardingStore.getOnboarding() : {};
+			const userId = (onboarding && onboarding.username) ? onboarding.username : 'app_user';
+			const sessionId = (onboarding && onboarding.sessionId) ? onboarding.sessionId : 'app_session';
+
+			const res = await fetch(GEMINI_PROXY_URL, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({ prompt, userId, sessionId })
+			});
+
+			if (!res.ok) {
+				const text = await res.text();
+				throw new Error(`Proxy error: ${res.status} ${text}`);
+			}
+
+			const payload = await res.json();
+			// Server (ai-server/app.py) returns { reply: text }
+			const aiText = (payload && (payload.reply || payload.text || payload.output)) || 'Sorry, I could not get a response.';
+
+			const aiMsg = { id: String(Date.now() + 1), text: aiText, sender: 'ai', time: timeNow() };
+			setMessages(prev => [...prev, aiMsg]);
+			// scroll to bottom after slight delay
+			setTimeout(() => scrollRef.current && scrollRef.current.scrollToEnd({ animated: true }), 200);
+		} catch (e) {
+			console.warn('AI proxy error', e);
+			setError(e.message || String(e));
+			const errMsg = { id: String(Date.now() + 2), text: `Error: ${e.message || 'Failed to get response'}`, sender: 'ai', time: timeNow() };
+			setMessages(prev => [...prev, errMsg]);
+		} finally {
+			setLoading(false);
 		}
-	};
+	}
 
 	return (
 		<SafeAreaView style={{ flex: 1, backgroundColor: "#000000" }}>
@@ -66,9 +105,10 @@ export default function AITravelAgentScreen({ navigation }) {
 			<ScrollView 
 				style={{ flex: 1, paddingHorizontal: 20 }}
 				showsVerticalScrollIndicator={false}
+				ref={scrollRef}
 			>
 				<View style={{ paddingVertical: 20 }}>
-					{messages.map((message, index) => (
+					{messages.map((message) => (
 						<View
 							key={message.id}
 							style={{
@@ -118,24 +158,6 @@ export default function AITravelAgentScreen({ navigation }) {
 								}}>
 									{message.text}
 								</Text>
-								{message.isLink && (
-									<TouchableOpacity style={{
-										marginTop: 10,
-										paddingVertical: 8,
-										paddingHorizontal: 12,
-										backgroundColor: '#2551A1',
-										borderRadius: 15,
-										alignItems: 'center'
-									}}>
-										<Text style={{
-											color: '#FFFFFF',
-											fontSize: 12,
-											fontWeight: '600'
-										}}>
-											View Opportunities →
-										</Text>
-									</TouchableOpacity>
-								)}
 							</View>
 
 							<Text style={{
@@ -150,48 +172,9 @@ export default function AITravelAgentScreen({ navigation }) {
 						</View>
 					))}
 
-					{/* Typing Indicator */}
-					{!isPaused && (
-						<View style={{
-							alignSelf: 'flex-start',
-							marginVertical: 8
-						}}>
-							<View style={{
-								flexDirection: 'row',
-								alignItems: 'center',
-								marginBottom: 5
-							}}>
-								<View style={{
-									width: 20,
-									height: 20,
-									borderRadius: 10,
-									backgroundColor: '#2551A1',
-									alignItems: 'center',
-									justifyContent: 'center',
-									marginRight: 8
-								}}>
-									<Text style={{ color: '#FFFFFF', fontSize: 12 }}>✨</Text>
-								</View>
-								<Text style={{
-									fontSize: 12,
-									color: '#B7B7B7'
-								}}>
-									AI Assistant
-								</Text>
-							</View>
-							<View style={{
-								backgroundColor: '#333333',
-								paddingHorizontal: 16,
-								paddingVertical: 12,
-								borderRadius: 20,
-								borderTopLeftRadius: 5,
-								flexDirection: 'row',
-								alignItems: 'center'
-							}}>
-								<Text style={{ color: '#FFFFFF', marginRight: 5 }}>●</Text>
-								<Text style={{ color: '#FFFFFF', marginRight: 5 }}>●</Text>
-								<Text style={{ color: '#FFFFFF' }}>●</Text>
-							</View>
+					{loading && (
+						<View style={{ alignSelf: 'flex-start', marginVertical: 8 }}>
+							<ActivityIndicator size="small" color="#2551A1" />
 						</View>
 					)}
 				</View>
@@ -270,6 +253,11 @@ export default function AITravelAgentScreen({ navigation }) {
 					<Text style={{ color: '#FFFFFF', fontSize: 16 }}>→</Text>
 				</TouchableOpacity>
 			</KeyboardAvoidingView>
+			{error ? (
+				<View style={{ paddingHorizontal: 20, paddingVertical: 8 }}>
+					<Text style={{ color: 'red' }}>{error}</Text>
+				</View>
+			) : null}
 
 			{/* Bottom Navigation */}
 			<View style={{
