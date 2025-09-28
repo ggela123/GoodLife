@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { SafeAreaView, View, ScrollView, Image, Text, TouchableOpacity } from "react-native";
+import { SafeAreaView, View, ScrollView, Text, TouchableOpacity } from "react-native";
+import BackButton from '../components/BackButton';
 import * as onboardingStoreModule from '../../onboardingStore';
 
 // normalize possible default wrapper (ESM/CJS interop)
@@ -13,11 +14,7 @@ export default ({ navigation }) => {
 	return (
 		<SafeAreaView style={{ flex: 1, backgroundColor: "#FFFFFF" }}>
 			<ScrollView style={{ flex: 1, backgroundColor: "#FFFFFF" }}>
-				<Image
-					source={{ uri: "https://storage.googleapis.com/tagjs-prod.appspot.com/v1/08FLrV2n9F/rtbasfeq_expires_30_days.png" }}
-					resizeMode={"stretch"}
-					style={{ width: 15, height: 15, marginTop: 25, marginBottom: 24, marginLeft: 13 }}
-				/>
+				<BackButton navigation={navigation} />
 
 				<View style={{ alignItems: "center", marginBottom: 52 }}>
 					<Text style={{ color: "#2551A1", fontSize: 20, fontWeight: "bold" }}>{"What’s your gender?"}</Text>
@@ -78,9 +75,10 @@ export default ({ navigation }) => {
 					<View style={{ backgroundColor: '#FFFFFF', paddingTop: 3, paddingBottom: 28 }}>
 						<View style={{ height: 1, backgroundColor: '#868686', marginBottom: 23, marginHorizontal: 15 }} />
 						<TouchableOpacity
-							style={{ alignItems: 'center', backgroundColor: '#2551A1', borderRadius: 100, paddingVertical: 14, marginHorizontal: 15 }}
+							style={{ alignItems: 'center', backgroundColor: selected ? '#2551A1' : '#B7B7B7', borderRadius: 100, paddingVertical: 14, marginHorizontal: 15 }}
+							disabled={!selected}
 							onPress={() => {
-								if (!selected) return; // no choice
+								if (!selected) return; // guard, though button is disabled when no selection
 								try {
 									if (onboardingStore && typeof onboardingStore.setOnboarding === 'function') {
 										onboardingStore.setOnboarding({ gender: selected });

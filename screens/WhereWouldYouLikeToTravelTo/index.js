@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { SafeAreaView, View, ScrollView, Image, Text, TouchableOpacity } from "react-native";
+import { SafeAreaView, View, ScrollView, Text, TouchableOpacity } from "react-native";
+import BackButton from '../components/BackButton';
 
 // defensive import for onboardingStore
 import * as onboardingStoreModule from '../../onboardingStore';
@@ -44,17 +45,7 @@ export default ({ navigation }) => {
 					flex: 1,
 					backgroundColor: "#FFFFFF",
 				}}>
-				<Image
-					source = {{uri: "https://storage.googleapis.com/tagjs-prod.appspot.com/v1/08FLrV2n9F/4ufnovtr_expires_30_days.png"}} 
-					resizeMode = {"stretch"}
-					style={{
-						width: 15,
-						height: 15,
-						marginTop: 25,
-						marginBottom: 24,
-						marginLeft: 13,
-					}}
-				/>
+				<BackButton navigation={navigation} />
 				<View 
 					style={{
 						alignItems: "center",
@@ -119,11 +110,13 @@ export default ({ navigation }) => {
 						<TouchableOpacity 
 							style={{
 								alignItems: "center",
-								backgroundColor: "#2551A1",
+								backgroundColor: selectedId ? "#2551A1" : "#B7B7B7",
 								borderRadius: 100,
 								paddingVertical: 14,
 								marginHorizontal: 15,
-							}} onPress={handleNext}>
+							}}
+							disabled={!selectedId}
+							onPress={() => { if (!selectedId) return; handleNext(); }}>
 							<Text 
 								style={{
 									color: "#FFFFFF",

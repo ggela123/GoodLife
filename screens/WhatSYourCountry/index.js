@@ -17,6 +17,8 @@ import countriesListLocal from '../../data/countries';
 import { supabase } from '../../supabase/supabaseClient';
 import { ActivityIndicator } from 'react-native';
 
+import BackButton from '../components/BackButton';
+
 export default ({ navigation }) => {
 	const [selected, setSelected] = useState(null);
 		const [open, setOpen] = useState(false);
@@ -98,11 +100,7 @@ export default ({ navigation }) => {
 	return (
 		<SafeAreaView style={{ flex: 1, backgroundColor: '#FFFFFF' }}>
 			<View style={{ padding: 15 }}>
-				<Image
-					source={{ uri: 'https://storage.googleapis.com/tagjs-prod.appspot.com/v1/08FLrV2n9F/8qzvend7_expires_30_days.png' }}
-					resizeMode={'stretch'}
-					style={{ width: 15, height: 15, marginTop: 8, marginBottom: 12 }}
-				/>
+				<BackButton navigation={navigation} style={{ marginTop: 8, marginBottom: 12 }} />
 				<View style={{ alignItems: 'center', marginBottom: 12 }}>
 					<Text style={{ color: '#2551A1', fontSize: 20, fontWeight: 'bold' }}>{'Where are you from?'}</Text>
 				</View>
@@ -145,7 +143,7 @@ export default ({ navigation }) => {
 								)}
 								{error ? (
 									<View style={{ marginTop: 8 }}>
-										<Text style={{ color: 'red' }}>{'Failed to load countries from remote; using local list.'}</Text>
+										{/* Error suppressed from UI for security; keep Retry button only */}
 										<TouchableOpacity onPress={async () => {
 											setError(null);
 											setLoading(true);
@@ -163,7 +161,7 @@ export default ({ navigation }) => {
 												setLoading(false);
 											}
 										}} style={{ marginTop: 8, padding: 8, backgroundColor: '#eee', alignSelf: 'flex-start', borderRadius: 6 }}>
-											<Text>{'Retry'}</Text>
+										<Text>{'Retry'}</Text>
 										</TouchableOpacity>
 									</View>
 								) : null}
@@ -172,8 +170,9 @@ export default ({ navigation }) => {
 
 				<View style={{ paddingVertical: 12 }}>
 					<TouchableOpacity
-						style={{ alignItems: 'center', backgroundColor: '#2551A1', borderRadius: 100, paddingVertical: 14 }}
-						onPress={handleNext}
+						style={{ alignItems: 'center', backgroundColor: selected ? '#2551A1' : '#B7B7B7', borderRadius: 100, paddingVertical: 14 }}
+						disabled={!selected}
+						onPress={() => { if (!selected) return; handleNext(); }}
 					>
 						<Text style={{ color: '#FFFFFF', fontSize: 14 }}>{'Next'}</Text>
 					</TouchableOpacity>

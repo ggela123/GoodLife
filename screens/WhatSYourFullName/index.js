@@ -1,5 +1,6 @@
 import React, { useRef, useState } from "react";
-import { SafeAreaView, View, ScrollView, Image, Text, TouchableOpacity, TextInput, KeyboardAvoidingView, Platform, } from "react-native";
+import { SafeAreaView, View, ScrollView, Text, TouchableOpacity, TextInput, KeyboardAvoidingView, Platform, } from "react-native";
+import BackButton from '../components/BackButton';
 import * as onboardingStoreModule from '../../onboardingStore';
 
 // normalize possible default wrapper (ESM/CJS interop)
@@ -26,17 +27,7 @@ export default ({ navigation }) => {
 							backgroundColor: "#FFFFFF",
 						}}
 					>
-				<Image
-					source = {{uri: "https://storage.googleapis.com/tagjs-prod.appspot.com/v1/08FLrV2n9F/yjevqwwn_expires_30_days.png"}} 
-					resizeMode = {"stretch"}
-					style={{
-						width: 15,
-						height: 15,
-						marginTop: 25,
-						marginBottom: 24,
-						marginLeft: 13,
-					}}
-				/>
+				<BackButton navigation={navigation} />
 				<View 
 					style={{
 						alignItems: "center",
@@ -129,11 +120,13 @@ export default ({ navigation }) => {
 							<TouchableOpacity 
 								style={{
 									alignItems: "center",
-									backgroundColor: "#2551A1",
+									backgroundColor: (firstName && lastName) ? "#2551A1" : "#B7B7B7",
 									borderRadius: 100,
 									paddingVertical: 14,
 									marginHorizontal: 15,
-								}} onPress={() => {
+								}}
+								disabled={!(firstName && lastName)}
+								onPress={() => {
 									try {
 										if (onboardingStore && typeof onboardingStore.setOnboarding === 'function') {
 											onboardingStore.setOnboarding({ first_name: firstName, last_name: lastName });

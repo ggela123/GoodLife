@@ -5,6 +5,7 @@ import * as onboardingStoreModule from '../../onboardingStore';
 const onboardingStore = onboardingStoreModule && onboardingStoreModule.default ? onboardingStoreModule.default : onboardingStoreModule;
 
 import countriesLocal from '../../data/countries';
+import BackButton from '../components/BackButton';
 import { supabase } from '../../supabase/supabaseClient';
 
 const codeToFlagEmoji = (code) => {
@@ -115,7 +116,8 @@ export default ({ navigation }) => {
 												)}
 											/>
 						)}
-						{error ? <Text style={{ color: 'red', padding: 8 }}>{'Failed to load remote countries; using local list.'}</Text> : null}
+						{/* suppress raw error messages from UI for security */}
+						{error ? null : null}
 					</View>
 				)}
 			</View>
@@ -135,7 +137,7 @@ export default ({ navigation }) => {
 	return (
 		<SafeAreaView style={{ flex:1, backgroundColor: '#FFFFFF' }}>
 			<ScrollView style={{ flex:1, backgroundColor: '#FFFFFF' }}>
-				<Image source={{ uri: 'https://storage.googleapis.com/tagjs-prod.appspot.com/v1/08FLrV2n9F/as7z0kup_expires_30_days.png' }} resizeMode={'stretch'} style={{ width:15, height:15, marginTop:25, marginBottom:24, marginLeft:13 }} />
+				<BackButton navigation={navigation} />
 				<View style={{ alignItems: 'center', marginBottom: 39 }}>
 					<Text style={{ color: '#2551A1', fontSize: 20, fontWeight: 'bold', textAlign: 'center', width: 241 }}>{'Which countries would you like to visit?'}</Text>
 				</View>
@@ -149,7 +151,11 @@ export default ({ navigation }) => {
 				<View style={{ paddingBottom: 45 }}>
 					<View style={{ backgroundColor: '#FFFFFF', paddingTop:3, paddingBottom: 28 }}>
 						<View style={{ height:1, backgroundColor: '#868686', marginBottom:23, marginHorizontal:15 }} />
-						<TouchableOpacity style={{ alignItems: 'center', backgroundColor: '#2551A1', borderRadius: 100, paddingVertical: 14, marginHorizontal: 15 }} onPress={handleNext}>
+						<TouchableOpacity
+							style={{ alignItems: 'center', backgroundColor: (selected && selected.some(Boolean)) ? '#2551A1' : '#B7B7B7', borderRadius: 100, paddingVertical: 14, marginHorizontal: 15 }}
+							disabled={!(selected && selected.some(Boolean))}
+							onPress={() => { if (!(selected && selected.some(Boolean))) return; handleNext(); }}
+						>
 							<Text style={{ color: '#FFFFFF', fontSize: 14 }}>{'Next'}</Text>
 						</TouchableOpacity>
 					</View>
