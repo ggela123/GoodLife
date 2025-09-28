@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { SafeAreaView, View, ScrollView, Image, Text, TouchableOpacity, Dimensions, PanResponder } from "react-native";
+import posts from '../../data/posts';
 
 const { width } = Dimensions.get('window');
 
@@ -34,18 +35,8 @@ export default function ProfileScreen({ navigation }) {
 		},
 	});
 
-	// Sample posts data
-	const posts = [
-		{ id: '1', type: 'image', content: '🏔️', location: 'Switzerland' },
-		{ id: '2', type: 'image', content: '🏰', location: 'Czech Republic' },
-		{ id: '3', type: 'image', content: '🌸', location: 'Japan' },
-		{ id: '4', type: 'image', content: '🏛️', location: 'Greece' },
-		{ id: '5', type: 'image', content: '🌊', location: 'Maldives' },
-		{ id: '6', type: 'image', content: '🌴', location: 'Thailand' },
-		{ id: '7', type: 'image', content: '🗻', location: 'Peru' },
-		{ id: '8', type: 'image', content: '🏕️', location: 'Canada' },
-		{ id: '9', type: 'image', content: '🌅', location: 'Indonesia' },
-	];
+	// Use shared posts as bookmarked posts
+	const bookmarked = posts;
 
 	return (
 		<SafeAreaView style={{ flex: 1, backgroundColor: "#FFFFFF" }} {...panResponder.panHandlers}>
@@ -79,39 +70,30 @@ export default function ProfileScreen({ navigation }) {
 					paddingVertical: 20,
 					paddingHorizontal: 20
 				}}>
-					{/* Profile Image */}
-					<View style={{
-						width: 100,
-						height: 100,
-						borderRadius: 50,
-						backgroundColor: '#E3F2FD',
-						alignItems: 'center',
-						justifyContent: 'center',
-						marginBottom: 15
-					}}>
-						<Text style={{ fontSize: 40 }}>👤</Text>
+					{/* Profile Image + flag under */}
+					<View style={{ alignItems: 'center', marginBottom: 10 }}>
+							{/* Profile avatar with flag overlay. To use a custom local image, place it at `assets/profile.jpg` and
+								change PROFILE_AVATAR to { uri: '' } or require('../../assets/profile.jpg') as needed. */}
+							<View style={{ width: 110, height: 110, borderRadius: 55, alignItems: 'center', justifyContent: 'center' }}>
+								<Image
+									source={{ uri: 'https://ggfdeiqcfkfjrucvisfd.supabase.co/storage/v1/object/public/org-media/profileGuy.png' }}
+									style={{ width: 110, height: 110, borderRadius: 55, backgroundColor: '#E3F2FD' }}
+								/>
+
+								{/* Flag badge (overlay) - bottom right of avatar */}
+								<View style={{ position: 'absolute', right: 2, bottom: 2, backgroundColor: '#FFFFFF', borderRadius: 12, paddingHorizontal: 6, paddingVertical: 2, alignItems: 'center', justifyContent: 'center', elevation: 2 }}>
+									<Text style={{ fontSize: 12 }}>🇺🇸</Text>
+								</View>
+							</View>
+
+							<Text style={{ fontSize: 18, fontWeight: '700', marginTop: 10 }}>Jason</Text>
+						<Text style={{ fontSize: 14, color: '#666', textAlign: 'center', lineHeight: 20, paddingHorizontal: 20 }}>
+							After living in Seattle for a couple of years, I'm here to conquer and explore the world.
+						</Text>
+						<View style={{ marginTop: 8 }}>
+							<Text style={{ fontSize: 12 }}>🇺🇸</Text>
+						</View>
 					</View>
-
-					{/* Name */}
-					<Text style={{
-						fontSize: 24,
-						fontWeight: '700',
-						color: '#2C2C2C',
-						marginBottom: 5
-					}}>
-						Jason
-					</Text>
-
-					{/* Bio */}
-					<Text style={{
-						fontSize: 14,
-						color: '#666',
-						textAlign: 'center',
-						lineHeight: 20,
-						paddingHorizontal: 20
-					}}>
-						After living in Seattle for a couple of years, I'm here to conquer and explore the world.
-					</Text>
 
 					{/* Stats */}
 					<View style={{
@@ -204,37 +186,49 @@ export default function ProfileScreen({ navigation }) {
 
 				{/* Content based on active tab */}
 				{activeTab === 0 && (
-					// Posts Grid
+					// Bookmarked Posts Grid (reuse Home posts) - rectangular tiles
 					<View style={{
 						flexDirection: 'row',
 						flexWrap: 'wrap',
 						padding: 5
 					}}>
-						{posts.map((post, index) => (
-							<TouchableOpacity
-								key={post.id}
-								style={{
-									width: (width - 20) / 3,
-									height: (width - 20) / 3,
-									backgroundColor: '#F5F5F5',
-									margin: 2.5,
-									borderRadius: 8,
-									alignItems: 'center',
-									justifyContent: 'center'
-								}}
-							>
-								<Text style={{ fontSize: 40 }}>{post.content}</Text>
-								<Text style={{
-									position: 'absolute',
-									bottom: 5,
-									fontSize: 10,
-									color: '#666',
-									textAlign: 'center'
-								}}>
-									{post.location}
-								</Text>
-							</TouchableOpacity>
-						))}
+						{bookmarked.slice(0,9).map((post) => {
+							// Use percentage width to guarantee 3 columns, compute pixel height from screen width
+							const tileWidthPx = Math.floor(width / 3);
+							const tileHeight = Math.round(tileWidthPx * 1.6);
+							return (
+								<TouchableOpacity
+									key={post.id}
+									style={{
+										width: '33.3333%',
+										height: tileHeight,
+										backgroundColor: '#F5F5F5',
+										padding: 1,
+										borderRadius: 8,
+										overflow: 'hidden'
+									}}
+									onPress={() => navigation.navigate('PostDetail', { post })}
+								>
+									<Image
+										source={{ uri: post.image }}
+										style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }}
+										resizeMode="cover"
+									/>
+									{/* rating top-left */}
+									<View style={{ position: 'absolute', top: 6, left: 6, backgroundColor: 'rgba(0,0,0,0.6)', borderRadius: 12, paddingHorizontal: 6, paddingVertical: 2 }}>
+										<Text style={{ color: '#fff', fontSize: 10 }}>{post.rating}</Text>
+									</View>
+									{/* flag top-right */}
+									<View style={{ position: 'absolute', top: 6, right: 6, backgroundColor: 'rgba(0,0,0,0.6)', borderRadius: 12, paddingHorizontal: 6, paddingVertical: 2 }}>
+										<Text style={{ fontSize: 12 }}>{post.flag}</Text>
+									</View>
+									{/* likes bottom-right */}
+									<View style={{ position: 'absolute', bottom: 6, right: 6, backgroundColor: 'rgba(0,0,0,0.6)', borderRadius: 12, paddingHorizontal: 6, paddingVertical: 2 }}>
+										<Text style={{ color: '#fff', fontSize: 10 }}>{post.likes}</Text>
+									</View>
+								</TouchableOpacity>
+							);
+						})}
 					</View>
 				)}
 
