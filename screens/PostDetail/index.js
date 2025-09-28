@@ -23,6 +23,48 @@ export default function PostDetail({ route, navigation }) {
           <View style={{ position: 'absolute', top: 12, right: 12, backgroundColor: '#fff', borderRadius: 6, paddingHorizontal: 8, paddingVertical: 6 }}>
             <Text style={{ fontSize: 14 }}>{post.flag}</Text>
           </View>
+
+          {/* Right vertical action column (overlay) */}
+          <View style={{ position: 'absolute', right: 12, top: '18%', alignItems: 'center' }}>
+            {/* Star / rating */}
+            <View style={{ alignItems: 'center', marginBottom: 14 }}>
+              <TouchableOpacity style={{ width: 44, height: 44, borderRadius: 22, backgroundColor: 'rgba(0,0,0,0.45)', alignItems: 'center', justifyContent: 'center' }} onPress={() => {}}>
+                <Text style={{ color: '#fff', fontSize: 18 }}>★</Text>
+              </TouchableOpacity>
+              <Text style={{ color: '#fff', fontSize: 11, marginTop: 6 }}>5.0</Text>
+            </View>
+
+            {/* User count */}
+            <View style={{ alignItems: 'center', marginBottom: 14 }}>
+              <TouchableOpacity style={{ width: 44, height: 44, borderRadius: 22, backgroundColor: 'rgba(0,0,0,0.45)', alignItems: 'center', justifyContent: 'center' }} onPress={() => {}}>
+                <Text style={{ color: '#fff', fontSize: 18 }}>👤</Text>
+              </TouchableOpacity>
+              <Text style={{ color: '#fff', fontSize: 11, marginTop: 6 }}>16</Text>
+            </View>
+
+            {/* Send / comment */}
+            <View style={{ alignItems: 'center', marginBottom: 14 }}>
+              <TouchableOpacity style={{ width: 44, height: 44, borderRadius: 22, backgroundColor: 'rgba(0,0,0,0.45)', alignItems: 'center', justifyContent: 'center' }} onPress={() => {}}>
+                <Text style={{ color: '#fff', fontSize: 18 }}>💬</Text>
+              </TouchableOpacity>
+              <Text style={{ color: '#fff', fontSize: 11, marginTop: 6 }}>Send</Text>
+            </View>
+
+            {/* Save / bookmark */}
+            <View style={{ alignItems: 'center', marginBottom: 14 }}>
+              <TouchableOpacity style={{ width: 44, height: 44, borderRadius: 22, backgroundColor: 'rgba(0,0,0,0.45)', alignItems: 'center', justifyContent: 'center' }} onPress={() => {}}>
+                <Text style={{ color: '#fff', fontSize: 18 }}>🔖</Text>
+              </TouchableOpacity>
+              <Text style={{ color: '#fff', fontSize: 11, marginTop: 6 }}>Save</Text>
+            </View>
+
+            {/* Share */}
+            <View style={{ alignItems: 'center' }}>
+              <TouchableOpacity style={{ width: 44, height: 44, borderRadius: 22, backgroundColor: 'rgba(0,0,0,0.45)', alignItems: 'center', justifyContent: 'center' }} onPress={() => {}}>
+                <Text style={{ color: '#fff', fontSize: 18 }}>⤴️</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
         </View>
 
         {/* Post metadata */}
