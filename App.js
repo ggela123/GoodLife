@@ -1,7 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
+import { createStackNavigator, CardStyleInterpolators } from '@react-navigation/stack';
 import { AuthProvider } from './supabase/AuthProvider';
 
 // Import your screens
@@ -32,8 +32,14 @@ export default function App() {
       <NavigationContainer>
       <Stack.Navigator 
         initialRouteName="Splash"
-        screenOptions={{
-          headerShown: false, // Hide headers for a cleaner look
+        // Use a function so we can enable animation per-route when route.params.animate === true
+        screenOptions={({ route }) => {
+          const wantsAnimation = route && route.params && route.params.animate === true;
+          return {
+            headerShown: false,
+            animationEnabled: !!wantsAnimation,
+            cardStyleInterpolator: wantsAnimation ? CardStyleInterpolators.forHorizontalIOS : CardStyleInterpolators.forNoAnimation,
+          };
         }}
       >
         <Stack.Screen name="Splash" component={SplashScreen} />

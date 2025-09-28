@@ -39,10 +39,10 @@ export default function AITravelAgentScreen({ navigation }) {
 			if (Math.abs(dx) > swipeThreshold) {
 				if (dx > 0) {
 					// Swipe right from AITravelAgent - go to Home (backward)
-					navigation.navigate('Home');
+					navigation.navigate('Home', { animate: true });
 				} else {
 					// Swipe left from AITravelAgent - go to Messages (forward)
-					navigation.navigate('Messages');
+					navigation.navigate('Messages', { animate: true });
 				}
 			}
 		},

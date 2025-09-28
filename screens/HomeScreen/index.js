@@ -41,13 +41,13 @@ const HomeScreen = ({ navigation }) => {
         // Swiped right - go to previous screen
         if (currentScreenIndex > 0) {
           const previousScreen = screenOrder[currentScreenIndex - 1];
-          navigation.navigate(previousScreen);
+          navigation.navigate(previousScreen, { animate: true });
         }
       } else if (gestureState.dx < -swipeThreshold) {
         // Swiped left - go to next screen
         if (currentScreenIndex < screenOrder.length - 1) {
           const nextScreen = screenOrder[currentScreenIndex + 1];
-          navigation.navigate(nextScreen);
+          navigation.navigate(nextScreen, { animate: true });
         }
       }
     },

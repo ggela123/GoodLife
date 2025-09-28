@@ -23,10 +23,10 @@ export default function MessagesScreen({ navigation }) {
 			if (Math.abs(dx) > swipeThreshold) {
 				if (dx > 0) {
 					// Swipe right from Messages - go to AITravelAgent (backward)
-					navigation.navigate('AITravelAgent');
+					navigation.navigate('AITravelAgent', { animate: true });
 				} else {
 					// Swipe left from Messages - go to Profile (forward)
-					navigation.navigate('Profile');
+					navigation.navigate('Profile', { animate: true });
 				}
 			}
 		},

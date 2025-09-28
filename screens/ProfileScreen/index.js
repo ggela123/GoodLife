@@ -26,10 +26,10 @@ export default function ProfileScreen({ navigation }) {
 			if (Math.abs(dx) > swipeThreshold) {
 				if (dx > 0) {
 					// Swipe right from Profile - go to Messages (backward)
-					navigation.navigate('Messages');
+					navigation.navigate('Messages', { animate: true });
 				} else {
 					// Swipe left from Profile - go to Home (forward)
-					navigation.navigate('Home');
+					navigation.navigate('Home', { animate: true });
 				}
 			}
 		},
