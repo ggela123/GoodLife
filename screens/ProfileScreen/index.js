@@ -280,39 +280,95 @@ export default function ProfileScreen({ navigation }) {
 
 			{/* Bottom Navigation */}
 			<View style={{
-				flexDirection: 'row',
-				justifyContent: 'space-around',
-				alignItems: 'center',
-				backgroundColor: '#FFFFFF',
-				paddingVertical: 15,
+				backgroundColor: "#FFFFFF",
+				paddingVertical: 12,
+				paddingHorizontal: 20,
 				borderTopWidth: 1,
-				borderTopColor: '#F0F0F0'
+				borderTopColor: "#E5E5E5",
+				shadowColor: "#000",
+				shadowOffset: {
+					width: 0,
+					height: -2,
+				},
+				shadowOpacity: 0.1,
+				shadowRadius: 3.84,
+				elevation: 5,
 			}}>
-				<TouchableOpacity 
-					style={{ alignItems: 'center' }}
-					onPress={() => navigation.navigate('Home')}
-				>
-					<Text style={{ fontSize: 20, marginBottom: 2 }}>🏠</Text>
-					<Text style={{ fontSize: 10, color: '#B7B7B7' }}>Home</Text>
-				</TouchableOpacity>
-				<TouchableOpacity 
-					style={{ alignItems: 'center' }}
-					onPress={() => navigation.navigate('AITravelAgent')}
-				>
-					<Text style={{ fontSize: 20, marginBottom: 2 }}>✨</Text>
-					<Text style={{ fontSize: 10, color: '#B7B7B7' }}>AI</Text>
-				</TouchableOpacity>
-				<TouchableOpacity 
-					style={{ alignItems: 'center' }}
-					onPress={() => navigation.navigate('Messages')}
-				>
-					<Text style={{ fontSize: 20, marginBottom: 2 }}>💬</Text>
-					<Text style={{ fontSize: 10, color: '#B7B7B7' }}>Messages</Text>
-				</TouchableOpacity>
-				<TouchableOpacity style={{ alignItems: 'center' }}>
-					<Text style={{ fontSize: 20, marginBottom: 2 }}>👤</Text>
-					<Text style={{ fontSize: 10, color: '#2551A1' }}>Profile</Text>
-				</TouchableOpacity>
+				<View style={{
+					flexDirection: "row",
+					justifyContent: "space-between",
+					alignItems: "center",
+					marginHorizontal: 16,
+				}}>
+					<TouchableOpacity 
+						onPress={() => navigation.navigate('Home')}
+						style={{
+							padding: 8,
+							width: 40,
+							height: 40,
+							alignItems: 'center',
+							justifyContent: 'center',
+						}}
+					>
+						<Image
+							source={{ uri: "https://storage.googleapis.com/tagjs-prod.appspot.com/v1/08FLrV2n9F/c1txpgcc_expires_30_days.png" }} 
+							resizeMode="stretch"
+							style={{ width: 24, height: 24, tintColor: '#8E8E93' }}
+						/>
+					</TouchableOpacity>
+					
+					<TouchableOpacity 
+						onPress={() => navigation.navigate('AITravelAgent')}
+						style={{
+							padding: 8,
+							width: 40,
+							height: 40,
+							alignItems: 'center',
+							justifyContent: 'center',
+						}}
+					>
+						<Image
+							source={{ uri: "https://storage.googleapis.com/tagjs-prod.appspot.com/v1/08FLrV2n9F/ja0fjaox_expires_30_days.png" }} 
+							resizeMode="stretch"
+							style={{ width: 24, height: 24, tintColor: '#8E8E93' }}
+						/>
+					</TouchableOpacity>
+					
+					<TouchableOpacity 
+						onPress={() => navigation.navigate('Messages')}
+						style={{
+							padding: 8,
+							width: 40,
+							height: 40,
+							alignItems: 'center',
+							justifyContent: 'center',
+						}}
+					>
+						<Image
+							source={{ uri: "https://storage.googleapis.com/tagjs-prod.appspot.com/v1/08FLrV2n9F/7n3wcgua_expires_30_days.png" }} 
+							resizeMode="stretch"
+							style={{ width: 24, height: 24, tintColor: '#8E8E93' }}
+						/>
+					</TouchableOpacity>
+					
+					<TouchableOpacity 
+						style={{
+							backgroundColor: '#007AFF',
+							borderRadius: 12,
+							padding: 8,
+							width: 40,
+							height: 40,
+							alignItems: 'center',
+							justifyContent: 'center',
+						}}
+					>
+						<Image
+							source={{ uri: "https://storage.googleapis.com/tagjs-prod.appspot.com/v1/08FLrV2n9F/5fjoe8j2_expires_30_days.png" }} 
+							resizeMode="stretch"
+							style={{ width: 20, height: 20, tintColor: '#FFFFFF' }}
+						/>
+					</TouchableOpacity>
+				</View>
 			</View>
 		</SafeAreaView>
 	);

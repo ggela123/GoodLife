@@ -448,52 +448,92 @@ const HomeScreen = ({ navigation }) => {
           left: 0,
           right: 0,
           backgroundColor: "#FFFFFF",
-          paddingVertical: 15,
+          paddingVertical: 12,
+          paddingHorizontal: 20,
           borderTopWidth: 1,
-          borderTopColor: "#D0D0D0",
+          borderTopColor: "#E5E5E5",
+          shadowColor: "#000",
+          shadowOffset: {
+            width: 0,
+            height: -2,
+          },
+          shadowOpacity: 0.1,
+          shadowRadius: 3.84,
+          elevation: 5,
         }}>
           <View style={{
             flexDirection: "row",
             justifyContent: "space-between",
             alignItems: "center",
-            marginHorizontal: 34,
+            marginHorizontal: 16,
           }}>
-            <TouchableOpacity onPress={() => navigation.navigate('Home')}>
+            <TouchableOpacity 
+              onPress={() => navigation.navigate('Home')}
+              style={{
+                backgroundColor: '#007AFF',
+                borderRadius: 12,
+                padding: 8,
+                width: 40,
+                height: 40,
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
               <Image
                 source={{ uri: "https://storage.googleapis.com/tagjs-prod.appspot.com/v1/08FLrV2n9F/c1txpgcc_expires_30_days.png" }} 
                 resizeMode="stretch"
-                style={{ width: 24, height: 24 }}
+                style={{ width: 20, height: 20, tintColor: '#FFFFFF' }}
               />
             </TouchableOpacity>
             
             <TouchableOpacity 
               onPress={() => navigation.navigate('AITravelAgent')}
               style={{
-                backgroundColor: '#007AFF',
-                borderRadius: 14,
-                padding: 4
+                padding: 8,
+                width: 40,
+                height: 40,
+                alignItems: 'center',
+                justifyContent: 'center',
               }}
             >
               <Image
                 source={{ uri: "https://storage.googleapis.com/tagjs-prod.appspot.com/v1/08FLrV2n9F/ja0fjaox_expires_30_days.png" }} 
                 resizeMode="stretch"
-                style={{ width: 28, height: 28 }}
+                style={{ width: 24, height: 24, tintColor: '#8E8E93' }}
               />
             </TouchableOpacity>
             
-            <TouchableOpacity onPress={() => navigation.navigate('Messages')}>
+            <TouchableOpacity 
+              onPress={() => navigation.navigate('Messages')}
+              style={{
+                padding: 8,
+                width: 40,
+                height: 40,
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
               <Image
                 source={{ uri: "https://storage.googleapis.com/tagjs-prod.appspot.com/v1/08FLrV2n9F/7n3wcgua_expires_30_days.png" }} 
                 resizeMode="stretch"
-                style={{ width: 24, height: 24 }}
+                style={{ width: 24, height: 24, tintColor: '#8E8E93' }}
               />
             </TouchableOpacity>
             
-            <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
+            <TouchableOpacity 
+              onPress={() => navigation.navigate('Profile')}
+              style={{
+                padding: 8,
+                width: 40,
+                height: 40,
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
               <Image
                 source={{ uri: "https://storage.googleapis.com/tagjs-prod.appspot.com/v1/08FLrV2n9F/5fjoe8j2_expires_30_days.png" }} 
                 resizeMode="stretch"
-                style={{ width: 24, height: 24 }}
+                style={{ width: 24, height: 24, tintColor: '#8E8E93' }}
               />
             </TouchableOpacity>
           </View>

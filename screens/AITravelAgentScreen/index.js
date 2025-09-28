@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react";
-import { SafeAreaView, View, ScrollView, Text, TouchableOpacity, TextInput, KeyboardAvoidingView, Platform, ActivityIndicator } from "react-native";
+import { SafeAreaView, View, ScrollView, Text, TouchableOpacity, TextInput, KeyboardAvoidingView, Platform, ActivityIndicator, Image } from "react-native";
 import Constants from 'expo-constants';
 import * as onboardingStoreModule from '../../onboardingStore';
 const onboardingStore = onboardingStoreModule && onboardingStoreModule.default ? onboardingStoreModule.default : onboardingStoreModule;
@@ -261,39 +261,87 @@ export default function AITravelAgentScreen({ navigation }) {
 
 			{/* Bottom Navigation */}
 			<View style={{
-				flexDirection: 'row',
-				justifyContent: 'space-around',
-				alignItems: 'center',
-				backgroundColor: '#000000',
-				paddingVertical: 15,
+				backgroundColor: "#000000",
+				paddingVertical: 12,
+				paddingHorizontal: 20,
 				borderTopWidth: 1,
-				borderTopColor: '#333333'
+				borderTopColor: "#333333",
 			}}>
-				<TouchableOpacity 
-					style={{ alignItems: 'center' }}
-					onPress={() => navigation.navigate('Home')}
-				>
-					<Text style={{ fontSize: 20, marginBottom: 2 }}>🏠</Text>
-					<Text style={{ fontSize: 10, color: '#666' }}>Home</Text>
-				</TouchableOpacity>
-				<TouchableOpacity style={{ alignItems: 'center' }}>
-					<Text style={{ fontSize: 20, marginBottom: 2 }}>✨</Text>
-					<Text style={{ fontSize: 10, color: '#2551A1' }}>AI</Text>
-				</TouchableOpacity>
-				<TouchableOpacity 
-					style={{ alignItems: 'center' }}
-					onPress={() => navigation.navigate('Messages')}
-				>
-					<Text style={{ fontSize: 20, marginBottom: 2 }}>💬</Text>
-					<Text style={{ fontSize: 10, color: '#666' }}>Messages</Text>
-				</TouchableOpacity>
-				<TouchableOpacity 
-					style={{ alignItems: 'center' }}
-					onPress={() => navigation.navigate('Profile')}
-				>
-					<Text style={{ fontSize: 20, marginBottom: 2 }}>👤</Text>
-					<Text style={{ fontSize: 10, color: '#666' }}>Profile</Text>
-				</TouchableOpacity>
+				<View style={{
+					flexDirection: "row",
+					justifyContent: "space-between",
+					alignItems: "center",
+					marginHorizontal: 16,
+				}}>
+					<TouchableOpacity 
+						onPress={() => navigation.navigate('Home')}
+						style={{
+							padding: 8,
+							width: 40,
+							height: 40,
+							alignItems: 'center',
+							justifyContent: 'center',
+						}}
+					>
+						<Image
+							source={{ uri: "https://storage.googleapis.com/tagjs-prod.appspot.com/v1/08FLrV2n9F/c1txpgcc_expires_30_days.png" }} 
+							resizeMode="stretch"
+							style={{ width: 24, height: 24, tintColor: '#666666' }}
+						/>
+					</TouchableOpacity>
+					
+					<TouchableOpacity 
+						style={{
+							backgroundColor: '#007AFF',
+							borderRadius: 12,
+							padding: 8,
+							width: 40,
+							height: 40,
+							alignItems: 'center',
+							justifyContent: 'center',
+						}}
+					>
+						<Image
+							source={{ uri: "https://storage.googleapis.com/tagjs-prod.appspot.com/v1/08FLrV2n9F/ja0fjaox_expires_30_days.png" }} 
+							resizeMode="stretch"
+							style={{ width: 20, height: 20, tintColor: '#FFFFFF' }}
+						/>
+					</TouchableOpacity>
+					
+					<TouchableOpacity 
+						onPress={() => navigation.navigate('Messages')}
+						style={{
+							padding: 8,
+							width: 40,
+							height: 40,
+							alignItems: 'center',
+							justifyContent: 'center',
+						}}
+					>
+						<Image
+							source={{ uri: "https://storage.googleapis.com/tagjs-prod.appspot.com/v1/08FLrV2n9F/7n3wcgua_expires_30_days.png" }} 
+							resizeMode="stretch"
+							style={{ width: 24, height: 24, tintColor: '#666666' }}
+						/>
+					</TouchableOpacity>
+					
+					<TouchableOpacity 
+						onPress={() => navigation.navigate('Profile')}
+						style={{
+							padding: 8,
+							width: 40,
+							height: 40,
+							alignItems: 'center',
+							justifyContent: 'center',
+						}}
+					>
+						<Image
+							source={{ uri: "https://storage.googleapis.com/tagjs-prod.appspot.com/v1/08FLrV2n9F/5fjoe8j2_expires_30_days.png" }} 
+							resizeMode="stretch"
+							style={{ width: 24, height: 24, tintColor: '#666666' }}
+						/>
+					</TouchableOpacity>
+				</View>
 			</View>
 		</SafeAreaView>
 	);
