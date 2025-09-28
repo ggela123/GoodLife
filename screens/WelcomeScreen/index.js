@@ -87,7 +87,7 @@ export default function WelcomeScreen({ navigation }) {
 							borderRadius: 100,
 							borderWidth: 1,
 						}}
-						onPress={() => navigation.navigate('WhatTypeOfAccount')}
+						onPress={() => navigation.navigate('SignUpCredentials')}
 					>
 						<Text 
 							style={{
