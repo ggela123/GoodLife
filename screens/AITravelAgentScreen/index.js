@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react";
-import { SafeAreaView, View, ScrollView, Text, TouchableOpacity, TextInput, KeyboardAvoidingView, Platform, ActivityIndicator, Image } from "react-native";
+import { SafeAreaView, View, ScrollView, Text, TouchableOpacity, TextInput, KeyboardAvoidingView, Platform, ActivityIndicator, Image, PanResponder } from "react-native";
 import Constants from 'expo-constants';
 import * as onboardingStoreModule from '../../onboardingStore';
 const onboardingStore = onboardingStoreModule && onboardingStoreModule.default ? onboardingStoreModule.default : onboardingStoreModule;
@@ -19,6 +19,34 @@ export default function AITravelAgentScreen({ navigation }) {
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState(null);
 	const scrollRef = useRef(null);
+
+	// Swipe gesture navigation
+	const screenOrder = ['Home', 'AITravelAgent', 'Messages', 'Profile'];
+	const currentScreenIndex = screenOrder.indexOf('AITravelAgent');
+
+	const panResponder = PanResponder.create({
+		onMoveShouldSetPanResponder: (_, gestureState) => {
+			// Only respond to horizontal swipes
+			return Math.abs(gestureState.dx) > Math.abs(gestureState.dy) && Math.abs(gestureState.dx) > 20;
+		},
+		onPanResponderMove: (_, gestureState) => {
+			// Optional: Add visual feedback during swipe
+		},
+		onPanResponderRelease: (_, gestureState) => {
+			const { dx } = gestureState;
+			const swipeThreshold = 50;
+
+			if (Math.abs(dx) > swipeThreshold) {
+				if (dx > 0) {
+					// Swipe right from AITravelAgent - go to Home (backward)
+					navigation.navigate('Home');
+				} else {
+					// Swipe left from AITravelAgent - go to Messages (forward)
+					navigation.navigate('Messages');
+				}
+			}
+		},
+	});
 
 	function timeNow() {
 		const d = new Date();
@@ -74,7 +102,7 @@ export default function AITravelAgentScreen({ navigation }) {
 	}
 
 	return (
-		<SafeAreaView style={{ flex: 1, backgroundColor: "#000000" }}>
+		<SafeAreaView style={{ flex: 1, backgroundColor: "#000000" }} {...panResponder.panHandlers}>
 			{/* Header */}
 			<View style={{
 				flexDirection: 'row',

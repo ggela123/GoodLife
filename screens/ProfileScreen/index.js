@@ -1,10 +1,38 @@
 import React, { useState } from "react";
-import { SafeAreaView, View, ScrollView, Image, Text, TouchableOpacity, Dimensions } from "react-native";
+import { SafeAreaView, View, ScrollView, Image, Text, TouchableOpacity, Dimensions, PanResponder } from "react-native";
 
 const { width } = Dimensions.get('window');
 
 export default function ProfileScreen({ navigation }) {
 	const [activeTab, setActiveTab] = useState(0);
+
+	// Swipe gesture navigation
+	const screenOrder = ['Home', 'AITravelAgent', 'Messages', 'Profile'];
+	const currentScreenIndex = screenOrder.indexOf('Profile');
+
+	const panResponder = PanResponder.create({
+		onMoveShouldSetPanResponder: (_, gestureState) => {
+			// Only respond to horizontal swipes
+			return Math.abs(gestureState.dx) > Math.abs(gestureState.dy) && Math.abs(gestureState.dx) > 20;
+		},
+		onPanResponderMove: (_, gestureState) => {
+			// Optional: Add visual feedback during swipe
+		},
+		onPanResponderRelease: (_, gestureState) => {
+			const { dx } = gestureState;
+			const swipeThreshold = 50;
+
+			if (Math.abs(dx) > swipeThreshold) {
+				if (dx > 0) {
+					// Swipe right from Profile - go to Messages (backward)
+					navigation.navigate('Messages');
+				} else {
+					// Swipe left from Profile - go to Home (forward)
+					navigation.navigate('Home');
+				}
+			}
+		},
+	});
 
 	// Sample posts data
 	const posts = [
@@ -20,7 +48,7 @@ export default function ProfileScreen({ navigation }) {
 	];
 
 	return (
-		<SafeAreaView style={{ flex: 1, backgroundColor: "#FFFFFF" }}>
+		<SafeAreaView style={{ flex: 1, backgroundColor: "#FFFFFF" }} {...panResponder.panHandlers}>
 			{/* Header */}
 			<View style={{
 				flexDirection: 'row',

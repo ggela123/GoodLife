@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { 
   View, 
   Text, 
@@ -7,7 +7,8 @@ import {
   Image, 
   TextInput,
   TouchableOpacity,
-  Dimensions 
+  Dimensions,
+  PanResponder 
 } from 'react-native';
 
 const { width } = Dimensions.get('window');
@@ -15,6 +16,41 @@ const { width } = Dimensions.get('window');
 const HomeScreen = ({ navigation }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('Recommended');
+
+  // Screen navigation order for swipe gestures
+  const screenOrder = ['Home', 'AITravelAgent', 'Messages', 'Profile'];
+  const currentScreenIndex = 0; // Home is index 0
+
+  // Swipe gesture handler
+  const panResponder = PanResponder.create({
+    onMoveShouldSetPanResponder: (evt, gestureState) => {
+      // Only respond to horizontal swipes with sufficient movement
+      return Math.abs(gestureState.dx) > Math.abs(gestureState.dy) && Math.abs(gestureState.dx) > 20;
+    },
+    onPanResponderGrant: () => {
+      // Gesture started
+    },
+    onPanResponderMove: () => {
+      // Gesture is moving
+    },
+    onPanResponderRelease: (evt, gestureState) => {
+      const swipeThreshold = 50;
+      
+      if (gestureState.dx > swipeThreshold) {
+        // Swiped right - go to previous screen
+        if (currentScreenIndex > 0) {
+          const previousScreen = screenOrder[currentScreenIndex - 1];
+          navigation.navigate(previousScreen);
+        }
+      } else if (gestureState.dx < -swipeThreshold) {
+        // Swiped left - go to next screen
+        if (currentScreenIndex < screenOrder.length - 1) {
+          const nextScreen = screenOrder[currentScreenIndex + 1];
+          navigation.navigate(nextScreen);
+        }
+      }
+    },
+  });
 
   const categories = ['Recommended', 'Europe', 'Asia', 'North America', 'South America', 'Africa'];
 
@@ -32,7 +68,8 @@ const HomeScreen = ({ navigation }) => {
       image: 'https://storage.googleapis.com/tagjs-prod.appspot.com/v1/08FLrV2n9F/0q1lgz0i_expires_30_days.png',
       caption: 'Amazing sunset views! This place is absolutely magical ',
       isVideo: true,
-      duration: '2:34'
+      duration: '2:34',
+      flag: '🇬🇷'
     },
     {
       id: 2,
@@ -46,7 +83,8 @@ const HomeScreen = ({ navigation }) => {
       comments: 31,
       image: 'https://storage.googleapis.com/tagjs-prod.appspot.com/v1/08FLrV2n9F/askufte8_expires_30_days.png',
       caption: 'Street food adventure in Shibuya! Must try the ramen here ',
-      isVideo: false
+      isVideo: false,
+      flag: '🇯🇵'
     },
     {
       id: 3,
@@ -61,7 +99,8 @@ const HomeScreen = ({ navigation }) => {
       image: 'https://storage.googleapis.com/tagjs-prod.appspot.com/v1/08FLrV2n9F/6xu8oj7u_expires_30_days.png',
       caption: 'Central Park in autumn is breathtaking 🍂',
       isVideo: true,
-      duration: '1:12'
+      duration: '1:12',
+      flag: '🇺🇸'
     },
     {
       id: 4,
@@ -75,7 +114,8 @@ const HomeScreen = ({ navigation }) => {
       comments: 8,
       image: 'https://storage.googleapis.com/tagjs-prod.appspot.com/v1/08FLrV2n9F/594e0cdu_expires_30_days.png',
       caption: "Gaudi's architecture never fails to amaze me",
-      isVideo: false
+      isVideo: false,
+      flag: '🇪🇸'
     },
     {
       id: 5,
@@ -90,7 +130,8 @@ const HomeScreen = ({ navigation }) => {
       image: 'https://storage.googleapis.com/tagjs-prod.appspot.com/v1/08FLrV2n9F/rdm19ujb_expires_30_days.png',
       caption: 'Korean BBQ night with friends! 🥩',
       isVideo: true,
-      duration: '3:45'
+      duration: '3:45',
+      flag: '🇰🇷'
     },
     {
       id: 6,
@@ -104,7 +145,8 @@ const HomeScreen = ({ navigation }) => {
       comments: 12,
       image: 'https://storage.googleapis.com/tagjs-prod.appspot.com/v1/08FLrV2n9F/575bkkic_expires_30_days.png',
       caption: 'Rainy day at Big Ben, still beautiful!',
-      isVideo: false
+      isVideo: false,
+      flag: '🇬🇧'
     },
     {
       id: 7,
@@ -119,7 +161,8 @@ const HomeScreen = ({ navigation }) => {
       image: 'https://storage.googleapis.com/tagjs-prod.appspot.com/v1/08FLrV2n9F/zsdtww79_expires_30_days.png',
       caption: 'Copacabana beach vibes are unmatched! 🏖️',
       isVideo: true,
-      duration: '4:12'
+      duration: '4:12',
+      flag: '🇧🇷'
     },
     {
       id: 8,
@@ -134,7 +177,8 @@ const HomeScreen = ({ navigation }) => {
       image: 'https://storage.googleapis.com/tagjs-prod.appspot.com/v1/08FLrV2n9F/q6f4yi8s_expires_30_days.png',
       caption: 'Opera House at sunset - pure magic ✨',
       isVideo: true,
-      duration: '2:58'
+      duration: '2:58',
+      flag: '🇦🇺'
     },
     {
       id: 9,
@@ -148,7 +192,8 @@ const HomeScreen = ({ navigation }) => {
       comments: 60,
       image: 'https://storage.googleapis.com/tagjs-prod.appspot.com/v1/08FLrV2n9F/50md1aig_expires_30_days.png',
       caption: 'Eiffel Tower never gets old 🇫🇷',
-      isVideo: false
+      isVideo: false,
+      flag: '🇫🇷'
     },
     {
       id: 10,
@@ -163,7 +208,8 @@ const HomeScreen = ({ navigation }) => {
       image: 'https://storage.googleapis.com/tagjs-prod.appspot.com/v1/08FLrV2n9F/4qu6dnzi_expires_30_days.png',
       caption: 'Burj Khalifa views from the top! 🏢',
       isVideo: true,
-      duration: '1:45'
+      duration: '1:45',
+      flag: '🇦🇪'
     },
     {
       id: 11,
@@ -178,7 +224,8 @@ const HomeScreen = ({ navigation }) => {
       image: 'https://storage.googleapis.com/tagjs-prod.appspot.com/v1/08FLrV2n9F/4dp1aaq3_expires_30_days.png',
       caption: 'Red Square in winter is magical ❄️',
       isVideo: true,
-      duration: '3:21'
+      duration: '3:21',
+      flag: '🇷🇺'
     },
     {
       id: 12,
@@ -193,7 +240,8 @@ const HomeScreen = ({ navigation }) => {
       image: 'https://storage.googleapis.com/tagjs-prod.appspot.com/v1/08FLrV2n9F/2vdj9ib7_expires_30_days.png',
       caption: 'Table Mountain hike was incredible! 🏔️',
       isVideo: true,
-      duration: '5:12'
+      duration: '5:12',
+      flag: '🇿🇦'
     }
   ];
 
@@ -221,111 +269,55 @@ const HomeScreen = ({ navigation }) => {
         resizeMode="cover"
       />
       
-      {/* Video indicator */}
-      {post.isVideo && (
-        <View style={{
-          position: 'absolute',
-          top: 8,
-          left: 8,
-          backgroundColor: 'rgba(0,0,0,0.6)',
-          borderRadius: 12,
-          paddingHorizontal: 8,
-          paddingVertical: 4,
-          flexDirection: 'row',
-          alignItems: 'center'
-        }}>
-          <Image
-            source={{ uri: 'https://storage.googleapis.com/tagjs-prod.appspot.com/v1/08FLrV2n9F/7n3wcgua_expires_30_days.png' }}
-            style={{ width: 12, height: 12, marginRight: 4 }}
-          />
-          <Text style={{ color: '#FFFFFF', fontSize: 10 }}>{post.duration}</Text>
-        </View>
-      )}
+      {/* Rating - top left corner */}
+      <View style={{
+        position: 'absolute',
+        top: 8,
+        left: 8,
+        backgroundColor: 'rgba(0,0,0,0.6)',
+        borderRadius: 12,
+        paddingHorizontal: 6,
+        paddingVertical: 2,
+        flexDirection: 'row',
+        alignItems: 'center'
+      }}>
+        <Image
+          source={{ uri: 'https://storage.googleapis.com/tagjs-prod.appspot.com/v1/08FLrV2n9F/vinlxzc9_expires_30_days.png' }}
+          style={{ width: 10, height: 10, marginRight: 2 }}
+        />
+        <Text style={{ color: '#FFFFFF', fontSize: 9 }}>{post.rating}</Text>
+      </View>
 
-      {/* Rating and like button */}
+      {/* Country flag - top right corner */}
       <View style={{
         position: 'absolute',
         top: 8,
         right: 8,
-        flexDirection: 'row',
-        alignItems: 'center'
+        backgroundColor: 'rgba(0,0,0,0.6)',
+        borderRadius: 12,
+        paddingHorizontal: 6,
+        paddingVertical: 2
       }}>
-        <View style={{
-          backgroundColor: 'rgba(0,0,0,0.6)',
-          borderRadius: 12,
-          paddingHorizontal: 6,
-          paddingVertical: 2,
-          flexDirection: 'row',
-          alignItems: 'center',
-          marginRight: 8
-        }}>
-          <Image
-            source={{ uri: 'https://storage.googleapis.com/tagjs-prod.appspot.com/v1/08FLrV2n9F/vinlxzc9_expires_30_days.png' }}
-            style={{ width: 10, height: 10, marginRight: 2 }}
-          />
-          <Text style={{ color: '#FFFFFF', fontSize: 9 }}>{post.rating}</Text>
-        </View>
-        
-        <TouchableOpacity
-          onPress={() => console.log('Liked post:', post.id)}
-          style={{
-            backgroundColor: 'rgba(0,0,0,0.6)',
-            borderRadius: 12,
-            padding: 6
-          }}
-        >
-          <Image
-            source={{ uri: 'https://storage.googleapis.com/tagjs-prod.appspot.com/v1/08FLrV2n9F/acowtnir_expires_30_days.png' }}
-            style={{ width: 16, height: 16 }}
-          />
-        </TouchableOpacity>
+        <Text style={{ fontSize: 12 }}>{post.flag || '🏳️'}</Text>
       </View>
 
-      {/* User info overlay */}
+      {/* Views - bottom right corner */}
       <View style={{
         position: 'absolute',
         bottom: 8,
-        left: 8,
-        right: 8
+        right: 8,
+        backgroundColor: 'rgba(0,0,0,0.6)',
+        borderRadius: 12,
+        paddingHorizontal: 6,
+        paddingVertical: 2
       }}>
-        <View style={{
-          backgroundColor: 'rgba(0,0,0,0.6)',
-          borderRadius: 8,
-          padding: 8
-        }}>
-          <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 4 }}>
-            <Image
-              source={{ uri: post.user.avatar }}
-              style={{ width: 20, height: 20, borderRadius: 10, marginRight: 6 }}
-            />
-            <Text style={{ color: '#FFFFFF', fontSize: 11, fontWeight: 'bold' }}>
-              {post.user.name}
-            </Text>
-          </View>
-          <Text style={{ color: '#FFFFFF', fontSize: 10, marginBottom: 2 }}>
-            {post.location}
-          </Text>
-          <Text 
-            style={{ color: '#FFFFFF', fontSize: 9, opacity: 0.9 }}
-            numberOfLines={2}
-          >
-            {post.caption}
-          </Text>
-          <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 4 }}>
-            <Text style={{ color: '#FFFFFF', fontSize: 9, marginRight: 12 }}>
-               {post.likes}
-            </Text>
-            <Text style={{ color: '#FFFFFF', fontSize: 9 }}>
-               {post.comments}
-            </Text>
-          </View>
-        </View>
+        <Text style={{ color: '#FFFFFF', fontSize: 9 }}>{post.likes}</Text>
       </View>
     </TouchableOpacity>
   );
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "#FFFFFF" }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: "#FFFFFF" }} {...panResponder.panHandlers}>
       <View style={{ flex: 1 }}>
         {/* Scrollable Content */}
         <ScrollView style={{ flex: 1, backgroundColor: "#FFFFFF" }}>

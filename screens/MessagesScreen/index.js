@@ -1,8 +1,36 @@
 import React, { useState } from "react";
-import { SafeAreaView, View, ScrollView, Image, Text, TouchableOpacity, TextInput } from "react-native";
+import { SafeAreaView, View, ScrollView, Image, Text, TouchableOpacity, TextInput, PanResponder } from "react-native";
 
 export default function MessagesScreen({ navigation }) {
 	const [searchQuery, setSearchQuery] = useState('');
+
+	// Swipe gesture navigation
+	const screenOrder = ['Home', 'AITravelAgent', 'Messages', 'Profile'];
+	const currentScreenIndex = screenOrder.indexOf('Messages');
+
+	const panResponder = PanResponder.create({
+		onMoveShouldSetPanResponder: (_, gestureState) => {
+			// Only respond to horizontal swipes
+			return Math.abs(gestureState.dx) > Math.abs(gestureState.dy) && Math.abs(gestureState.dx) > 20;
+		},
+		onPanResponderMove: (_, gestureState) => {
+			// Optional: Add visual feedback during swipe
+		},
+		onPanResponderRelease: (_, gestureState) => {
+			const { dx } = gestureState;
+			const swipeThreshold = 50;
+
+			if (Math.abs(dx) > swipeThreshold) {
+				if (dx > 0) {
+					// Swipe right from Messages - go to AITravelAgent (backward)
+					navigation.navigate('AITravelAgent');
+				} else {
+					// Swipe left from Messages - go to Profile (forward)
+					navigation.navigate('Profile');
+				}
+			}
+		},
+	});
 
 	const conversations = [
 		{
@@ -44,7 +72,8 @@ export default function MessagesScreen({ navigation }) {
 			style={{
 				flex: 1,
 				backgroundColor: "#FFFFFF",
-			}}>
+			}}
+			{...panResponder.panHandlers}>
 			
 			{/* Header */}
 			<View style={{
