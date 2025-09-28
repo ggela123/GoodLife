@@ -1,6 +1,39 @@
-import React from "react";
-import { SafeAreaView, View, ScrollView, Image, Text, TouchableOpacity, } from "react-native";
+import React, { useState } from "react";
+import { SafeAreaView, View, ScrollView, Text, TouchableOpacity } from "react-native";
+import BackButton from '../components/BackButton';
+
+// defensive import for onboardingStore
+import * as onboardingStoreModule from '../../onboardingStore';
+const onboardingStore = onboardingStoreModule && onboardingStoreModule.default ? onboardingStoreModule.default : onboardingStoreModule;
+
+const CONTINENTS = [
+	{ id: 1, name: 'Europe' },
+	{ id: 2, name: 'Asia' },
+	{ id: 3, name: 'North America' },
+	{ id: 4, name: 'South America' },
+	{ id: 5, name: 'Oceania' },
+	{ id: 6, name: 'Africa' },
+];
+
 export default ({ navigation }) => {
+		const [selectedId, setSelectedId] = useState(null);
+
+		function toggleSelect(id) {
+			setSelectedId(prev => (prev === id ? null : id));
+		}
+
+	function handleNext() {
+		const payload = { continent_ids: selectedId ? [selectedId] : [] };
+		if (onboardingStore && typeof onboardingStore.setOnboarding === 'function') {
+			onboardingStore.setOnboarding(payload);
+			console.log('onboarding: continent_ids stored ->', payload);
+			console.log('onboarding state ->', onboardingStore.getOnboarding ? onboardingStore.getOnboarding() : onboardingStore);
+		} else {
+			console.warn('onboardingStore not available', Object.keys(onboardingStore || {}));
+		}
+		navigation.navigate('WhichCountriesWouldYouLikeToVisit');
+	}
+
 	return (
 		<SafeAreaView 
 			style={{
@@ -12,17 +45,7 @@ export default ({ navigation }) => {
 					flex: 1,
 					backgroundColor: "#FFFFFF",
 				}}>
-				<Image
-					source = {{uri: "https://storage.googleapis.com/tagjs-prod.appspot.com/v1/08FLrV2n9F/4ufnovtr_expires_30_days.png"}} 
-					resizeMode = {"stretch"}
-					style={{
-						width: 15,
-						height: 15,
-						marginTop: 25,
-						marginBottom: 24,
-						marginLeft: 13,
-					}}
-				/>
+				<BackButton navigation={navigation} />
 				<View 
 					style={{
 						alignItems: "center",
@@ -39,120 +62,33 @@ export default ({ navigation }) => {
 						{"Where would you like to travel to?"}
 					</Text>
 				</View>
-				<View 
-					style={{
-						backgroundColor: "#FFFFFF",
-						borderColor: "#2C2C2C",
-						borderRadius: 100,
-						borderWidth: 1,
-						paddingVertical: 14,
-						marginBottom: 20,
-						marginHorizontal: 13,
-					}}>
-					<Text 
-						style={{
-							color: "#2C2C2C",
-							fontSize: 14,
-							marginLeft: 137,
-						}}>
-						{"Europe"}
-					</Text>
-				</View>
-				<TouchableOpacity 
-					style={{
-						alignItems: "center",
-						backgroundColor: "#FFFFFF",
-						borderColor: "#2C2C2C",
-						borderRadius: 100,
-						borderWidth: 1,
-						paddingVertical: 14,
-						marginBottom: 20,
-						marginHorizontal: 13,
-					}} onPress={()=>alert('Pressed!')}>
-					<Text 
-						style={{
-							color: "#2C2C2C",
-							fontSize: 14,
-						}}>
-						{"Asia"}
-					</Text>
-				</TouchableOpacity>
-				<TouchableOpacity 
-					style={{
-						alignItems: "center",
-						backgroundColor: "#FFFFFF",
-						borderColor: "#2C2C2C",
-						borderRadius: 100,
-						borderWidth: 1,
-						paddingVertical: 14,
-						marginBottom: 20,
-						marginHorizontal: 13,
-					}} onPress={()=>alert('Pressed!')}>
-					<Text 
-						style={{
-							color: "#2C2C2C",
-							fontSize: 14,
-						}}>
-						{"North America"}
-					</Text>
-				</TouchableOpacity>
-				<TouchableOpacity 
-					style={{
-						alignItems: "center",
-						backgroundColor: "#FFFFFF",
-						borderColor: "#2C2C2C",
-						borderRadius: 100,
-						borderWidth: 1,
-						paddingVertical: 14,
-						marginBottom: 20,
-						marginHorizontal: 13,
-					}} onPress={()=>alert('Pressed!')}>
-					<Text 
-						style={{
-							color: "#2C2C2C",
-							fontSize: 14,
-						}}>
-						{"South America"}
-					</Text>
-				</TouchableOpacity>
-				<TouchableOpacity 
-					style={{
-						alignItems: "center",
-						backgroundColor: "#FFFFFF",
-						borderColor: "#2C2C2C",
-						borderRadius: 100,
-						borderWidth: 1,
-						paddingVertical: 14,
-						marginBottom: 20,
-						marginHorizontal: 13,
-					}} onPress={()=>alert('Pressed!')}>
-					<Text 
-						style={{
-							color: "#2C2C2C",
-							fontSize: 14,
-						}}>
-						{"Oceania"}
-					</Text>
-				</TouchableOpacity>
-				<TouchableOpacity 
-					style={{
-						alignItems: "center",
-						backgroundColor: "#FFFFFF",
-						borderColor: "#2C2C2C",
-						borderRadius: 100,
-						borderWidth: 1,
-						paddingVertical: 14,
-						marginBottom: 126,
-						marginHorizontal: 13,
-					}} onPress={()=>alert('Pressed!')}>
-					<Text 
-						style={{
-							color: "#2C2C2C",
-							fontSize: 14,
-						}}>
-						{"Africa"}
-					</Text>
-				</TouchableOpacity>
+
+						{CONTINENTS.map(cont => {
+							const isSelected = selectedId === cont.id;
+					return (
+						<TouchableOpacity 
+							key={cont.id}
+							style={{
+								alignItems: "center",
+								backgroundColor: isSelected ? '#eef6ff' : '#FFFFFF',
+								borderColor: isSelected ? '#2551A1' : '#2C2C2C',
+								borderRadius: 100,
+								borderWidth: 1,
+								paddingVertical: 14,
+								marginBottom: 20,
+								marginHorizontal: 13,
+							}} onPress={() => toggleSelect(cont.id)}>
+							<Text 
+								style={{
+									color: isSelected ? '#2551A1' : '#2C2C2C',
+									fontSize: 14,
+								}}>
+								{cont.name}
+							</Text>
+						</TouchableOpacity>
+					)
+				})}
+
 				<View 
 					style={{
 						paddingBottom: 45,
@@ -174,11 +110,13 @@ export default ({ navigation }) => {
 						<TouchableOpacity 
 							style={{
 								alignItems: "center",
-								backgroundColor: "#2551A1",
+								backgroundColor: selectedId ? "#2551A1" : "#B7B7B7",
 								borderRadius: 100,
 								paddingVertical: 14,
 								marginHorizontal: 15,
-							}} onPress={() => navigation.navigate('WhichCountriesWouldYouLikeToVisit')}>
+							}}
+							disabled={!selectedId}
+							onPress={() => { if (!selectedId) return; handleNext(); }}>
 							<Text 
 								style={{
 									color: "#FFFFFF",

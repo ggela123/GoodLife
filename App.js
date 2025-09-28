@@ -10,6 +10,7 @@ import WelcomeScreen from './screens/WelcomeScreen';
 import LoginScreen from './screens/LoginScreen';
 import LoadingScreen from './screens/LoadingScreen';
 import WhatTypeOfAccount from './screens/WhatTypeOfAccount';
+import SignUpCredentials from './screens/SignUpCredentials';
 import WhatSYourFullName from './screens/WhatSYourFullName';
 import WhatSYourGender from './screens/WhatSYourGender';
 import WhatSYourCountry from './screens/WhatSYourCountry';
@@ -39,6 +40,7 @@ export default function App() {
         <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="Loading" component={LoadingScreen} />
         <Stack.Screen name="WhatTypeOfAccount" component={WhatTypeOfAccount} />
+  <Stack.Screen name="SignUpCredentials" component={SignUpCredentials} />
         <Stack.Screen name="WhatSYourFullName" component={WhatSYourFullName} />
         <Stack.Screen name="WhatSYourGender" component={WhatSYourGender} />
         <Stack.Screen name="WhatSYourCountry" component={WhatSYourCountry} />
